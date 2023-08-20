@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 
+
 const app = express();
 
 // Set up storage for uploaded images using multer
@@ -33,6 +34,10 @@ app.post('/upload', upload.single('image'), (req, res) => {
 
   res.status(200).send('Image uploaded successfully.');
 });
+
+app.get('/', (req,res) => {
+  res.status(200).send('Hey I am Server')
+})
 
 // Start the server
 const PORT = 3000;
