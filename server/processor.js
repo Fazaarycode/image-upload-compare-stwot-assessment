@@ -13,8 +13,33 @@ faceapi.env.monkeyPatch({ Canvas: canvas.Canvas, Image: canvas.Image, ImageData:
 
 async function processAndDetectFaces(imageBuffer) {
   // Load models for face detection
-  await faceapi.nets.tinyFaceDetector.loadFromDisk('../models');
-  await faceapi.nets.faceLandmark68Net.loadFromDisk('../models');
+  // await faceapi.nets.tinyFaceDetector.loadFromDisk('../models');
+  // await faceapi.nets.faceLandmark68Net.loadFromDisk('../models');
+
+  await faceDetectionNet.loadFromDisk('../models')
+  await faceapi.nets.faceLandmark68Net.loadFromDisk('../models')
+  await faceapi.nets.faceRecognitionNet.loadFromDisk('../models')
+
+  const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
+  const queryImage = await canvas.loadImage(QUERY_IMAGE)
+
+  const resultsRef = await faceapi.detectAllFaces(referenceImage, faceDetectionOptions)
+    .withFaceLandmarks()
+    .withFaceDescriptors()
+
+  const resultsQuery = await faceapi.detectAllFaces(queryImage, faceDetectionOptions)
+    .withFaceLandmarks()
+    .withFaceDescriptors()
+
+  const faceMatcher = new faceapi.FaceMatcher(resultsRef)
+
+  const labels = faceMatcher.labeledDescriptors
+    .map(ld => ld.label)
+  const refDrawBoxes = resultsRef
+    .map(res => res.detection.box)
+    .map((box, i) => new faceapi.draw.DrawBox(box, { label: labels[i] }))
+  const outRef = faceapi.createCanvasFromMedia(referenceImage)
+  refDrawBoxes.forEach(drawBox => drawBox.draw(outRef))
   
   // Load and process the image using sharp
   const image = sharp(imageBuffer);

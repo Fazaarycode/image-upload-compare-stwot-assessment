@@ -7,9 +7,9 @@ const QUERY_IMAGE = '../images/bbt4.jpg'
 
 async function run() {
 
-  await faceDetectionNet.loadFromDisk('../../weights')
-  await faceapi.nets.faceLandmark68Net.loadFromDisk('../../weights')
-  await faceapi.nets.faceRecognitionNet.loadFromDisk('../../weights')
+  await faceDetectionNet.loadFromDisk('../models')
+  await faceapi.nets.faceLandmark68Net.loadFromDisk('../models')
+  await faceapi.nets.faceRecognitionNet.loadFromDisk('../models')
 
   const referenceImage = await canvas.loadImage(REFERENCE_IMAGE)
   const queryImage = await canvas.loadImage(QUERY_IMAGE)

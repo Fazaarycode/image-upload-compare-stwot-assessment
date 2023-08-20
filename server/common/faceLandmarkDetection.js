@@ -4,8 +4,8 @@ import { canvas, faceDetectionNet, faceDetectionOptions, saveFile } from './comm
 
 async function run() {
 
-  await faceDetectionNet.loadFromDisk('../../weights')
-  await faceapi.nets.faceLandmark68Net.loadFromDisk('../../weights')
+  await faceDetectionNet.loadFromDisk('../models')
+  await faceapi.nets.faceLandmark68Net.loadFromDisk('../models')
 
   const img = await canvas.loadImage('../images/bbt1.jpg')
   const results = await faceapi.detectAllFaces(img, faceDetectionOptions)
